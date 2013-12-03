@@ -2,7 +2,7 @@ module Easypay
   class PaymentReference < ActiveRecord::Base
     self.table_name = 'easypay_payment_references'
     
-    attr_protected
+    #attr_protected
     
     def process(object, options = {})
       @object = object
