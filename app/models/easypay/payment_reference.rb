@@ -43,7 +43,7 @@ module Easypay
       if compliant?
         self.update_attributes(handle_model_methods)
 
-        payment_reference = Easypay::Client.new(options).create_reference(self)
+        payment_reference = Client.new(options).create_reference(self)
 
         self.update_attributes( :payable_type => payable_type,
                                 :ep_message => payment_reference["ep_message"],
@@ -51,7 +51,7 @@ module Easypay
                                 :ep_cin => payment_reference["ep_cin"],
                                 :ep_user => payment_reference["ep_user"],
                                 :ep_entity => payment_reference["ep_entity"],
-                                :ep_link => payment_reference["payment_link"],
+                                :ep_link => payment_reference["ep_link"],
                                 :ep_last_status => payment_reference["ep_status"],
                                 :request_log => payment_reference["raw"],
                                 :item_description => self.item_description,
@@ -72,7 +72,7 @@ module Easypay
     def modify(action, options = {})
       @object = self
 
-      response = Easypay::Client.new(options).modify_payment_reference(self, action)
+      response = Client.new(options).modify_payment_reference(self, action)
 
       if action.to_s.match("delete")
         self.update_attributes(:ep_status => "deleted") if response[:ep_status].starts_with? "ok"

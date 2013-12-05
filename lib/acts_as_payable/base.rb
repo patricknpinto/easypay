@@ -8,36 +8,36 @@ module Easypay
           extend Config
         end
       end
-      
+
       module Config
         def acts_as_payable args = {}
           has_many :payment_references,  :class_name => 'Easypay::PaymentReference', :conditions => ["payable_type = '#{self.name.to_s}'"], :foreign_key => "payable_id"
-          
-          define_method "easypay_options" do 
-            { 
+
+          define_method "easypay_options" do
+            {
               :payable_id => args[:id] || "id",
               :ep_value => args[:value] || "value",
               :ep_language  => args[:language] || "language",
               :o_name  => args[:name] || "name",
-              :o_description  => args[:description] || "description", 
+              :o_description  => args[:description] || "description",
               :o_obs => args[:obs] || "obs",
               :o_email => args[:email] || "email",
               :o_mobile => args[:mobile] || "mobile",
               :item_description => args[:item_description] || "item_description",
               :item_quantity => args[:item_quantity] || "item_quantity"
-            } 
+            }
           end
-          
-          include Easypay::ActsAsPayable::Base::InstanceMethods
+
+          include ActsAsPayable::Base::InstanceMethods
         end
       end
-      
+
       module InstanceMethods
-        
+
         def create_payment_reference(options={})
-          Easypay::PaymentReference.new.process(self, options)
+          PaymentReference.new.process(self, options)
         end
-                
+
       end # InstanceMethods
     end
 

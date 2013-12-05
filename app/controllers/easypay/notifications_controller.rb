@@ -21,20 +21,22 @@ module Easypay
       if params[:s].starts_with? "ok" and params[:k].present? and payment_reference.present?
         payment_reference.update_attribute(:o_key, params[:k]) unless payment_reference.nil?
 
-        payment_detail = Easypay::Client.new.request_payment(params[:e], params[:r], params[:v], params[:k])
+        payment_detail = Client.new.request_payment(params[:e], params[:r], params[:v], params[:k])
 
         payment_reference.update_attributes(:ep_last_status => payment_detail[:ep_status], 
                                             :ep_message => payment_detail[:ep_message]) unless payment_reference.nil?
+
       elsif payment_reference.present?
         payment_reference.update_attribute(:ep_last_status, params[:s])
       end
 
-      redirect_to payment_redirect_url(:status => params[:s], :ep_key => params[:t_key])
+      # redirects to thankyou page, since the notification comes after
+      redirect_to cart_thankyou_path(:easypay => 'done')
     end
 
     def notification_from_payment
       # ep_cin=8103&ep_user=OUTITUDE&ep_doc=TESTOUTITUDE0088690520120712152503
-      payment_detail = Easypay::Client.new.get_payment_detail("", params[:ep_doc])
+      payment_detail = Client.new.get_payment_detail("", params[:ep_doc])
       payment_detail = payment_detail["getautoMB_detail"]
 
       @payment_reference = PaymentReference.find_by_ep_reference_and_ep_key(payment_detail["ep_reference"], payment_detail["t_key"])
@@ -63,7 +65,7 @@ module Easypay
     private
 
     def register_notification
-      Easypay::Log.create(:request_type => "Notification", :request_url => request.fullpath, :request_remote_ip => request.remote_ip)
+      Log.create(:request_type => "Notification", :request_url => request.fullpath, :request_remote_ip => request.remote_ip)
     end
   end
 end

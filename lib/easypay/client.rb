@@ -131,7 +131,7 @@ module Easypay
 
         result = { :endpoint => EASYPAY_SERVICE_URL, :url => url, :raw => response.body }
 
-        Easypay::Log.create(:request_type => "Request", :request_url => "#{EASYPAY_SERVICE_URL}#{url}", :raw => response.body)
+        Log.create(:request_type => "Request", :request_url => "#{EASYPAY_SERVICE_URL}#{url}", :raw => response.body)
 
         return parse_content(result)
 
