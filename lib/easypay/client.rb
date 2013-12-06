@@ -12,6 +12,7 @@ module Easypay
         @easypay_code = hash_options[:easypay_code] || Easypay::Engine.config.code
         @easypay_ref_type = hash_options[:easypay_ref_type] || "auto"
         @easypay_country = hash_options[:easypay_country] || "PT"
+        @easypay_type = hash_options[:easypay_type] || nil
       elsif params.first
         puts "* warning: the method Easypay::Client.new(ep_cin, ep_user, ep_entity) is deprecated, use Easypay::Client.new(:easypay_cin => 'cin', :easypay_user => 'user', :easypay_entity => 'entity')"
         @easypay_cin = params.shift || Easypay::Engine.config.cin
@@ -52,10 +53,8 @@ module Easypay
         :o_description => object.o_description.nil? ? "" : URI.escape(object.o_description),
         :o_obs => object.o_obs.nil? ? "" : URI.escape(object.o_obs),
         :o_mobile => object.o_mobile.nil? ? "" : URI.escape(object.o_mobile),
-        :o_email => object.o_email.nil? ? "" : URI.escape(object.o_email)
-        # :ep_rec => "yes", # Reccurrence stuff
-        # :ep_rec_freq => recurrence,
-        # :ep_rec_url => url_notification_cc
+        :o_email => object.o_email.nil? ? "" : URI.escape(object.o_email),
+        :ep_type => @easypay_type
       return result["getautoMB"]
     end
 

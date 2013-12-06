@@ -54,6 +54,7 @@ module Easypay
                                 :ep_link => payment_reference["ep_link"],
                                 :ep_last_status => payment_reference["ep_status"],
                                 :request_log => payment_reference["raw"],
+                                :ep_boleto => payment_reference["ep_boleto"],
                                 :item_description => self.item_description,
                                 :item_quantity => self.item_quantity,
                                 :o_name  => self.o_name,

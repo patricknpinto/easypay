@@ -23,7 +23,7 @@ module Easypay
 
         payment_detail = Client.new.request_payment(params[:e], params[:r], params[:v], params[:k])
 
-        payment_reference.update_attributes(:ep_last_status => payment_detail[:ep_status], 
+        payment_reference.update_attributes(:ep_last_status => payment_detail[:ep_status],
                                             :ep_message => payment_detail[:ep_message]) unless payment_reference.nil?
 
       elsif payment_reference.present?
