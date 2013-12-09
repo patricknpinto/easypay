@@ -1,7 +1,7 @@
 module Easypay
   class NotificationsController < ApplicationController
 
-    unloadable
+    # unloadable
 
     before_filter :register_notification
 

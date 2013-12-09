@@ -2,7 +2,8 @@ module Easypay
   class PaymentReference < ActiveRecord::Base
     self.table_name = 'easypay_payment_references'
 
-    #attr_protected
+    # attr protected not used anymore in rails 4
+    # attr_protected
 
     # TODO validate witch params are worth updating
     # TODO validate if listing is needed
@@ -32,13 +33,15 @@ module Easypay
                                 :o_description  => self.o_description,
                                 :o_obs => self.o_obs,
                                 :o_email => self.o_email,
-                                :o_mobile  => self.o_mobile)
+                                :o_mobile  => self.o_mobile) if payment_reference
                                 # "ep_payment_date"=>"2013-12-04 12:58:54"
     end
 
     def process(object, options = {})
       @object = object
       payable_type = @object.class.to_s
+
+
 
       if compliant?
         self.update_attributes(handle_model_methods)
@@ -111,7 +114,7 @@ module Easypay
         :ep_value => @object.easypay_options[:ep_value],
         :ep_language  => @object.easypay_options[:ep_language],
         :o_name  => @object.easypay_options[:o_name],
-        :o_description  => @object.easypay_options[:o_description], 
+        :o_description  => @object.easypay_options[:o_description],
         :o_obs => @object.easypay_options[:o_obs],
         :o_email => @object.easypay_options[:o_email],
         :o_mobile  => @object.easypay_options[:o_mobile],

@@ -10,11 +10,9 @@ Gem::Specification.new do |s|
   s.summary     = %q{This Gem provides connection to easypay API}
   s.description = %q{This Gem provides connection to easypay API, that allow you to use credit cards and MB references to Portugal}
   s.extra_rdoc_files = ["README.md"]
-  
+
   s.rubyforge_project = "easypay"
-  
-  s.add_dependency('nokogiri')
-  
+
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

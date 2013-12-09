@@ -123,10 +123,18 @@ module Easypay
     end
 
     def get(service_name, args)
-      begin
-        url = build_url(service_name, args)
 
-        response = create_http.get(url, nil)
+      begin
+        #binding.pry
+        if Rails.env == 'test'
+          puts "--------------------------------------------------------------------"
+          puts "testing for #{service_name}"
+          puts "--------------------------------------------------------------------"
+          response = create_test_result_for(service_name, args)
+        else
+          url = build_url(service_name, args)
+          response = create_http.get(url, nil)
+        end
 
         result = { :endpoint => EASYPAY_SERVICE_URL, :url => url, :raw => response.body }
 
@@ -135,14 +143,123 @@ module Easypay
         return parse_content(result)
 
       rescue Exception => ex
+        puts '#######################################################'
+        puts ex.to_s
+        puts '#######################################################'
         return { :success => false, :ep_message => ex.message }
       end
     end
 
+    def create_test_result_for service_name, args
+      if service_name == '01BG'
+        Class.new do
+          def body
+            <<-xmlresponse
+            <?xml version="1.0" encoding="ISO-8859-1"?>
+            <getautoMB>
+            <ep_status>ok0</ep_status>
+            <ep_message>ep_country and ep_entity and ep_user and ep_cin ok and validation by code;code ok - new reference generated - 281703985 - </ep_message>
+            <ep_cin>2817</ep_cin>
+            <ep_user>ALTP021213</ep_user>
+            <ep_entity>10611</ep_entity>
+            <ep_reference>281703985</ep_reference>
+            <ep_value>10.00</ep_value>
+            <t_key>5d8bf237094b09aef88cbf8f1</t_key>
+            <ep_link>http://test.easypay.pt/_s/c11.php?e=10611&amp;r=281703985&amp;v=10.00&amp;c=PT&amp;l=PT&amp;t_key=5d8bf237094b09aef88cbf8f1</ep_link>
+            <ep_boleto>http://test.easypay.pt/_s/boleto.php?hash=f6374718b8a4e922841cc734f55f695e</ep_boleto>
+            </getautoMB>
+            xmlresponse
+          end
+        end.new
+      elsif service_name == '040BG1'
+
+        if args[:o_list_type]["id"]
+          Class.new do
+            def body
+              <<-xmlresponse
+              <?xml version="1.0" encoding="ISO-8859-1"?>
+              <get_ref>
+                <ep_status>ok0</ep_status>
+                <ep_message>ep_country and ep_entity and ep_user and ep_cin ok and validation by ip; query with 1 record</ep_message>
+                <ep_num_records>1</ep_num_records>
+                <ref_detail>
+                  <ref>
+                    <ep_cin>400</ep_cin>
+                    <ep_user>EASYTEST9</ep_user>
+                    <ep_entity>10611</ep_entity>
+                    <ep_reference>888900268</ep_reference>
+                    <ep_value>20</ep_value>
+                    <ep_key>2</ep_key>
+                    <t_key></t_key>
+                    <ep_doc>EASYTEST90011888920101108212500</ep_doc> <ep_payment_type>MB</ep_payment_type>
+                    <ep_value_fixed>0.83</ep_value_fixed>
+                    <ep_value_var>0</ep_value_var>
+                    <ep_value_tax>0.174</ep_value_tax>
+                    <ep_value_transf>19</ep_value_transf>
+                    <ep_date_transf>2010-11-16</ep_date_transf>
+                    <ep_key_read>2</ep_key_read>
+                    <ep_date_read>2010-11-09 00:00:00</ep_date_read> <ep_status_read>verified</ep_status_read>
+                    <ep_status>pago</ep_status>
+                    <ep_batch_transf></ep_batch_transf>
+                    <ep_invoice_number></ep_invoice_number>
+                    <ep_payment_date>2010-11-08 00:00:00</ep_payment_date>
+                  </ref>
+                </ref_detail>
+              </get_ref>
+              xmlresponse
+            end
+          end.new
+        else
+          Class.new do
+            def body
+              <<-xmlresponse
+              <?xml version="1.0" encoding="ISO-8859-1"?>
+              <get_ref>
+                <ep_status>ok0</ep_status>
+                <ep_message>ep_country and ep_entity and ep_user and ep_cin ok and validation by ip; query with 1 record</ep_message>
+                <ep_num_records>1</ep_num_records>
+                <ref_detail>
+                  <ref>
+                    <ep_cin>400</ep_cin>
+                    <ep_user>EASYTEST9</ep_user>
+                    <ep_entity>10611</ep_entity>
+                    <ep_reference>888900268</ep_reference>
+                    <ep_value>20</ep_value>
+                    <ep_key>2</ep_key>
+                    <t_key></t_key>
+                    <ep_doc>EASYTEST90011888920101108212500</ep_doc> <ep_payment_type>MB</ep_payment_type>
+                    <ep_value_fixed>0.83</ep_value_fixed>
+                    <ep_value_var>0</ep_value_var>
+                    <ep_value_tax>0.174</ep_value_tax>
+                    <ep_value_transf>19</ep_value_transf>
+                    <ep_date_transf>2010-11-16</ep_date_transf>
+                    <ep_key_read>2</ep_key_read>
+                    <ep_date_read>2010-11-09 00:00:00</ep_date_read> <ep_status_read>verified</ep_status_read>
+                    <ep_status>pago</ep_status>
+                    <ep_batch_transf></ep_batch_transf>
+                    <ep_invoice_number></ep_invoice_number>
+                    <ep_payment_date>2010-11-08 00:00:00</ep_payment_date>
+                  </ref>
+                  <ref>
+                   <ep_key>2</ep_key>
+                  </ref>
+                </ref_detail>
+              </get_ref>
+              xmlresponse
+            end
+          end.new
+        end
+      else
+        ""
+      end
+    end
+
     def parse_content(result)
-      doc = Nokogiri::XML(result[:raw])
-      data = Hash.from_xml(doc.to_xml).to_json
+      data = Hash.from_xml(result[:raw]).to_json
       return JSON.parse(data)
     end
   end
 end
+
+
+
