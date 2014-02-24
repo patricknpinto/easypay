@@ -3,7 +3,7 @@
 
 Gem::Specification.new do |s|
   s.name        = "easypay"
-  s.version     = "1.1.1"
+  s.version     = "1.2.0"
   s.authors     = ["Guilherme Pereira"]
   s.email       = ["guiferrpereira@gmail.com"]
   s.homepage    = ""

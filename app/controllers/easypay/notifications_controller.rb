@@ -36,7 +36,7 @@ module Easypay
 
     def notification_from_payment
       # ep_cin=8103&ep_user=OUTITUDE&ep_doc=TESTOUTITUDE0088690520120712152503
-      payment_detail = Client.new.get_payment_detail("", params[:ep_doc])
+      payment_detail = Client.new.get_payment_detail("", params[:ep_doc], params[:ep_type])
       payment_detail = payment_detail["getautoMB_detail"]
 
       @payment_reference = PaymentReference.find_by_ep_reference_and_ep_key(payment_detail["ep_reference"], payment_detail["t_key"])

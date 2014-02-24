@@ -58,10 +58,11 @@ module Easypay
       return result["getautoMB"]
     end
 
-    def get_payment_detail(ep_key, ep_doc)
+    def get_payment_detail(ep_key, ep_doc, ep_type)
       get "03AG",
         :ep_key => ep_key,
-        :ep_doc => ep_doc
+        :ep_doc => ep_doc,
+        :ep_type => ep_type
     end
 
     def get_payment_list(type="last", detail=10, format="xml")
