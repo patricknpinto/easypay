@@ -84,7 +84,7 @@ module Easypay
         self.update_attributes(:item_description => self.item_description,
                                :item_quantity => self.item_quantity,
                                :o_name  => self.o_name,
-                               :o_description  => self.o_description, 
+                               :o_description  => self.o_description,
                                :o_obs => self.o_obs,
                                :o_email => self.o_email,
                                :o_mobile  => self.o_mobile)

@@ -31,7 +31,7 @@ module Easypay
       end
 
       # redirects to thankyou page, since the notification comes after
-      redirect_to cart_thankyou_path(:easypay => 'done')
+      redirect_to thankyou_cart_path(:easypay => 'done')
     end
 
     def notification_from_payment
@@ -57,7 +57,7 @@ module Easypay
                                             :ep_status => 'finalized')
 
         # TODO validates the url for using as a gem
-        redirect_to confirm_payment_url(@payment_reference.payable_id) and return
+        redirect_to confirm_payment_order_url(@payment_reference.ep_key) and return
       end
 
     end

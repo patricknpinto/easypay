@@ -126,7 +126,6 @@ module Easypay
     def get(service_name, args)
 
       begin
-        #binding.pry
         if Rails.env == 'test'
           puts "--------------------------------------------------------------------"
           puts "testing for #{service_name}"
