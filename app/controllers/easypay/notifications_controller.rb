@@ -31,7 +31,7 @@ module Easypay
       end
 
       # redirects to thankyou page, since the notification comes after
-      redirect_to thankyou_cart_path(:easypay => 'done')
+      redirect_to thankyou_order_path(:easypay => 'done')
     end
 
     def notification_from_payment
