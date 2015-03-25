@@ -127,9 +127,6 @@ module Easypay
 
       begin
         if Rails.env == 'test'
-          puts "--------------------------------------------------------------------"
-          puts "testing for #{service_name}"
-          puts "--------------------------------------------------------------------"
           response = create_test_result_for(service_name, args)
         else
           url = build_url(service_name, args)
@@ -143,9 +140,6 @@ module Easypay
         return parse_content(result)
 
       rescue Exception => ex
-        puts '#######################################################'
-        puts ex.to_s
-        puts '#######################################################'
         return { :success => false, :ep_message => ex.message }
       end
     end
