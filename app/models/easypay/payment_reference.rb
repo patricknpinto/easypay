@@ -102,6 +102,8 @@ module Easypay
           attributes[attribute_name] = @object.send(method_name)
         elsif !attribute_name.to_s.match("ep_key").nil?
           attributes[attribute_name] = method_name
+        else
+          attributes[attribute_name] = model_attributes[attribute_name.to_sym]
         end
       end
       return attributes
